@@ -1,0 +1,3 @@
+0. bin/hadoop fs -put soc_livejournal.txt inputSoc
+1. bin/hadoop HaloopPageRank_m.jar inputSoc outputSoc 20(iteration) 4847571(# of nodes) 3(# of reducers)
+2. bin/hadoop NaivePageRank_m.jar inputSoc outputSoc 20(iteration) 4847571(# of nodes) 3(# of reducers)
