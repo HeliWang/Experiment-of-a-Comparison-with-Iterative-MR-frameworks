@@ -1,0 +1,1 @@
+bin/hadoop jar NaivePageRank.jar org.apache.hadoop.examples.pagerank.NaivePageRank inputSoc outputPageRank 10(iterarion) 916417(number of nodes) 5(# of reduces)

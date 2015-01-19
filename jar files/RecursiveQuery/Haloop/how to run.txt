@@ -1,0 +1,2 @@
+1. bin/hadoop jar NaiveRQ_m.jar inputSoc outputSoc 92636(query) 10(iteration) //soc_livejournal
+2. bin/hadoop jar HaloopRQ_m.jar inputSoc outputSoc 92636(query) 10(iteration) //soc_livejournal
