@@ -33,7 +33,7 @@ public class StaticDistributeReduceRep extends MapReduceBase implements
 					Text.class, null, null);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		} 
 	}
 
 	public void reduce(IntWritable arg0, Iterator<Text> values,
