@@ -22,6 +22,8 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 public class PGR extends Configured implements Tool {
+	
+	
 	private int partitions;
 	private int interval;
 	private int iterations;
