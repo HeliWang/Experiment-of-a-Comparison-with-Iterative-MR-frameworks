@@ -41,7 +41,7 @@ public class StaticDistributeReduceRep extends MapReduceBase implements
 			throws IOException {
 		while (values.hasNext()) {
 			Text value = (Text) values.next();
-			if(value.equals("")) continue;
+			if(value.toString().trim().equals("")) continue;
 			this.writer.append(arg0, value);
 			System.out.println(arg0 + " : " + value);
 		}
