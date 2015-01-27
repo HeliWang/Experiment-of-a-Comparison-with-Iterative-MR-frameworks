@@ -7,8 +7,6 @@ import java.util.List;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.examples.iterative.Common;
-import org.apache.hadoop.examples.iterative.PreProcess;
-import org.apache.hadoop.examples.iterative.UniDistIntPartitioner;
 import org.apache.hadoop.examples.iterative.Util;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -42,7 +40,7 @@ public class DQuery extends Configured implements Tool {
 		
 		for(String ar:args){ System.out.println(ar);}
 
-		ToolRunner.run(new Configuration(), new PreProcess(), args);
+		ToolRunner.run(new Configuration(), new PreProcessRep(), args);
 	}
 	
 	private int dquery(String input, String output) throws IOException{
@@ -82,7 +80,7 @@ public class DQuery extends Configured implements Tool {
 	    job.setMapOutputValueClass(Text.class);
 	    job.setOutputKeyClass(IntWritable.class);
 	    job.setOutputValueClass(Text.class);
-	    job.setPartitionerClass(UniDistIntPartitioner.class);
+	    job.setPartitionerClass(UniDistIntPartitionerRep.class);
 
 	    job.setNumMapTasks(partitions);
 	    job.setNumReduceTasks(partitions);
