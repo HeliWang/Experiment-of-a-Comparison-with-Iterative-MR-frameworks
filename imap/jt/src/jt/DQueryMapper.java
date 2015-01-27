@@ -57,24 +57,17 @@ IntWritable, Text, IntWritable, Text>{
 		System.out.println("dk : " + datakey + " : " + dataval);
 		if (!value.toString().equals("-1")){
 			String nodes = value.toString();
-			ArrayList<String> outlist = new ArrayList<String>();
 			String[] nodelist = nodes.split(" "); 
 			
 			String fnode = datakey.toString();
 			System.out.println("not frist : " + fnode);
 			for (String node : nodelist){
 				System.out.println("in nodelist : " + node);
-				if (node.equals(fnode)){
-					if(!outlist.contains(datakey)){
-						System.out.println(key.toString() + " : " + datakey.toString());
-						output.collect(key, new Text(datakey.toString()));
-					}
-					if(!outlist.contains(dataval)){
-						System.out.println(key.toString() + " : " + dataval.toString());
-						output.collect(key, new Text(dataval.toString()));
-					}
-				}
+				output.collect(new IntWritable(Integer.parseInt(node.toString())), new Text("-2"));
 			}
+		}
+		else if(value.toString().equals("-2")){
+			output.collect(new IntWritable(Integer.parseInt(start_node.toString())), new Text(dataval.toString()));
 		}
 		else{
 			String fnode = datakey.toString();

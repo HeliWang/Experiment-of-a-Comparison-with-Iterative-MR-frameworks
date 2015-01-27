@@ -1,6 +1,7 @@
 package jt;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -30,9 +31,13 @@ IterativeReducer<IntWritable, Text, IntWritable, Text>{
 			OutputCollector<IntWritable, Text> output, Reporter report)
 			throws IOException {
 		String res = "";
+		ArrayList<String> outlist = new ArrayList<String>();
 		while(values.hasNext()){
 			Text v = values.next();
-			res += v.toString() + " ";
+			if (!outlist.contains(v.toString())){
+				res += v.toString() + " ";
+				outlist.add(v.toString());
+			}
 		}
 		output.collect(new IntWritable(Integer.parseInt(key.toString())), new Text(res));
 	}
