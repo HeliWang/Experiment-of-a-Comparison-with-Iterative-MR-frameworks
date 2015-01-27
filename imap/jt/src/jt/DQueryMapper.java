@@ -55,7 +55,18 @@ IntWritable, Text, IntWritable, Text>{
 		
 		System.out.println("k1 : " + key + " : " + value);
 		System.out.println("dk : " + datakey + " : " + dataval);
-		if (!value.toString().equals("-1")){
+				
+		if(value.toString().equals("-1")){
+			String fnode = datakey.toString();
+			if (fnode.equals(start_node)){
+				System.out.println(datakey.toString() + " : " + dataval.toString());
+				output.collect(datakey, new Text(dataval.toString()));
+			}
+		}
+		else if(value.toString().equals("-2")){
+			output.collect(new IntWritable(Integer.parseInt(start_node.toString())), new Text(dataval.toString()));
+		}
+		else{
 			String nodes = value.toString();
 			String[] nodelist = nodes.split(" "); 
 			
@@ -65,16 +76,6 @@ IntWritable, Text, IntWritable, Text>{
 				System.out.println("in nodelist : " + node);
 				output.collect(new IntWritable(Integer.parseInt(node.toString())), new Text("-2"));
 			}
-		}
-		else if(value.toString().equals("-2")){
-			output.collect(new IntWritable(Integer.parseInt(start_node.toString())), new Text(dataval.toString()));
-		}
-		else{
-			String fnode = datakey.toString();
-			if (fnode.equals(start_node)){
-				System.out.println(datakey.toString() + " : " + dataval.toString());
-				output.collect(datakey, new Text(dataval.toString()));
-			}	
 		}
 	}
 

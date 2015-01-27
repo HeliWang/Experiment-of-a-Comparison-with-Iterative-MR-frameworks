@@ -30,6 +30,7 @@ IterativeReducer<IntWritable, Text, IntWritable, Text>{
 	public void reduce(IntWritable key, Iterator<Text> values,
 			OutputCollector<IntWritable, Text> output, Reporter report)
 			throws IOException {
+		System.out.println("reduce " + key + " : " + values);
 		String res = "";
 		ArrayList<String> outlist = new ArrayList<String>();
 		while(values.hasNext()){
