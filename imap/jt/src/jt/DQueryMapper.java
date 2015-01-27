@@ -58,7 +58,7 @@ IntWritable, Text, IntWritable, Text>{
 		if (!value.toString().equals("-1")){
 			String nodes = value.toString();
 			ArrayList<String> outlist = new ArrayList<String>();
-			String[] nodelist = nodes.split(" ");
+			String[] nodelist = nodes.split(" "); 
 			
 			String fnode = datakey.toString();
 			
