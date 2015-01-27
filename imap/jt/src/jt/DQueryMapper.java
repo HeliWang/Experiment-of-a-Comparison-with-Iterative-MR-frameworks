@@ -61,8 +61,9 @@ IntWritable, Text, IntWritable, Text>{
 			String[] nodelist = nodes.split(" "); 
 			
 			String fnode = datakey.toString();
-			
+			System.out.println("not frist : " + fnode);
 			for (String node : nodelist){
+				System.out.println("in nodelist : " + node);
 				if (node.equals(fnode)){
 					if(!outlist.contains(datakey)){
 						System.out.println(key.toString() + " : " + datakey.toString());
