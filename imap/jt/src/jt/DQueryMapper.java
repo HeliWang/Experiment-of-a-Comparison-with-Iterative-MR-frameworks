@@ -66,7 +66,7 @@ IntWritable, Text, IntWritable, Text>{
 				output.collect(new IntWritable(Integer.parseInt(node.toString())), new Text("-2"));
 			}
 		}
-		if(value.toString().trim().equals("-2")){
+		else if(value.toString().contains("-2")){
 			System.out.println("in 2 emit " + start_node.toString() + " : " + dataval.toString());
 			output.collect(new IntWritable(Integer.parseInt(start_node.toString())), new Text(dataval.toString()));
 			System.out.println("in 2 emit " + start_node.toString() + " : " + datakey.toString());
@@ -77,6 +77,9 @@ IntWritable, Text, IntWritable, Text>{
 				System.out.println("in 2 nodelist emit : " + node);
 				output.collect(new IntWritable(Integer.parseInt(node.toString())), new Text("-2"));
 			}
+		}
+		else{
+			output.collect(key, value);
 		}
 	}
 

@@ -40,6 +40,7 @@ IterativeReducer<IntWritable, Text, IntWritable, Text>{
 			Text v = values.next();
 			if (!outlist.contains(v.toString())){
 				if(key.toString().equals(start_node) && v.toString().trim().equals("-2")) continue;
+				if(key.toString().equals(start_node) && v.toString().trim().equals(start_node)) continue;
 				res += v.toString() + " ";
 				outlist.add(v.toString());
 			}
