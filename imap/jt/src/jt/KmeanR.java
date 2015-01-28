@@ -135,8 +135,8 @@ public class KmeanR extends Configured implements Tool {
 			}
 		}
 
-		System.out.println("inkmean");
-		for(Object ar:other_args){ System.out.println((String)ar);}
+//		System.out.println("inkmean");
+//		for(Object ar:other_args){ System.out.println((String)ar);}
 
 		if (other_args.size() < 5) {
 			System.out.println("ERROR: Wrong number of parameters: "
@@ -150,7 +150,7 @@ public class KmeanR extends Configured implements Tool {
 		String instate = (String) other_args.get(2);
 		String instatic = (String) other_args.get(3);
 		String output = (String) other_args.get(4);
-		this.k = Integer.parseInt(args[4]);
+		this.k = Integer.parseInt((String)other_args.get(5));
 
 		preprocess(instate, instatic);
 		iterateKMeans(input, output);
