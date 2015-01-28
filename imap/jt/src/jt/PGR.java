@@ -82,7 +82,7 @@ public class PGR extends Configured implements Tool {
 		job.setMapOutputValueClass(DoubleWritable.class);
 		job.setOutputKeyClass(IntWritable.class);
 		job.setOutputValueClass(DoubleWritable.class);
-		job.setPartitionerClass(UniDistIntPartitioner.class);
+		job.setPartitionerClass(UniDistIntPartitionerRep.class);
 
 		job.setNumMapTasks(this.partitions);
 		job.setNumReduceTasks(this.partitions);

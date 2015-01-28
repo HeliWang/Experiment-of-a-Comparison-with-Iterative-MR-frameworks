@@ -19,27 +19,32 @@ IterativeReducer<IntWritable, Text, IntWritable, Text>{
 
 	private Date start;
 	private int iteration;
+	private String start_node;
 	
 	@Override
 	public void configure(JobConf conf){
 		start = new Date();
 		iteration = 0;
+		
+		start_node = conf.get("dquery.start_node");
+
 	}
 	
 	@Override
 	public void reduce(IntWritable key, Iterator<Text> values,
 			OutputCollector<IntWritable, Text> output, Reporter report)
 			throws IOException {
-		System.out.println("reduce " + key + " : " + values);
 		String res = "";
 		ArrayList<String> outlist = new ArrayList<String>();
 		while(values.hasNext()){
 			Text v = values.next();
 			if (!outlist.contains(v.toString())){
+				if(key.toString().equals(start_node) && v.toString().trim().equals("-2")) continue;
 				res += v.toString() + " ";
 				outlist.add(v.toString());
 			}
 		}
+		System.out.println("reduce " + key + " : " + res);
 		output.collect(new IntWritable(Integer.parseInt(key.toString())), new Text(res));
 	}
 	

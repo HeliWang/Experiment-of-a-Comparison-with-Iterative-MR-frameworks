@@ -27,7 +27,6 @@ IntWritable, Text, IntWritable, Text>{
 	private int taskid;
 	
 	private String start_node;
-
 	 
 	@Override
 	public void configure(JobConf job) {
@@ -45,7 +44,7 @@ IntWritable, Text, IntWritable, Text>{
 		
 		start_node = job.get("dquery.start_node");
 		
-		taskid = Util.getTaskId(job);		
+		taskid = Util.getTaskId(job);
 	}
 	
 	@Override
@@ -55,25 +54,27 @@ IntWritable, Text, IntWritable, Text>{
 		
 		System.out.println("k1 : " + key + " : " + value);
 		System.out.println("dk : " + datakey + " : " + dataval);
-				
-		if(value.toString().equals("-1")){
-			String fnode = datakey.toString();
-			if (fnode.equals(start_node)){
-				System.out.println(datakey.toString() + " : " + dataval.toString());
-				output.collect(datakey, new Text(dataval.toString()));
+
+		String fnode = datakey.toString();
+		if (fnode.equals(start_node)){
+			System.out.println("emit " + datakey.toString() + " : " + dataval.toString());
+			output.collect(datakey, new Text(dataval.toString()));
+			String nodes = dataval.toString();
+			String[] nodelist = nodes.split(" ");
+			for (String node : nodelist){
+				System.out.println("in nodelist emit : " + node);
+				output.collect(new IntWritable(Integer.parseInt(node.toString())), new Text("-2"));
 			}
 		}
-		else if(value.toString().equals("-2")){
+		if(value.toString().trim().equals("-2")){
+			System.out.println("in 2 emit " + start_node.toString() + " : " + dataval.toString());
 			output.collect(new IntWritable(Integer.parseInt(start_node.toString())), new Text(dataval.toString()));
-		}
-		else{
-			String nodes = value.toString();
-			String[] nodelist = nodes.split(" "); 
-			
-			String fnode = datakey.toString();
-			System.out.println("not frist : " + fnode);
+			System.out.println("in 2 emit " + start_node.toString() + " : " + datakey.toString());
+			output.collect(new IntWritable(Integer.parseInt(start_node.toString())), new Text(datakey.toString()));
+			String nodes = dataval.toString();
+			String[] nodelist = nodes.split(" ");
 			for (String node : nodelist){
-				System.out.println("in nodelist : " + node);
+				System.out.println("in 2 nodelist emit : " + node);
 				output.collect(new IntWritable(Integer.parseInt(node.toString())), new Text("-2"));
 			}
 		}
