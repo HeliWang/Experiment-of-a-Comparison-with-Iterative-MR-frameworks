@@ -53,7 +53,7 @@ IntWritable, Text, IntWritable, Text>{
 			throws IOException {
 		
 		System.out.println("k1 : " + key + " : " + value);
-		System.out.println("dk : " + datakey + " : " + dataval);
+		System.out.println("dk : " + datakey + " : " + dataval); 
 
 		String fnode = datakey.toString();
 		if (fnode.equals(start_node)){
@@ -66,11 +66,11 @@ IntWritable, Text, IntWritable, Text>{
 				output.collect(new IntWritable(Integer.parseInt(node.toString())), new Text("-2"));
 			}
 		}
-		else if(value.toString().contains("-2")){
+		else if(value.toString().contains("-2")){ 
 			System.out.println("in 2 emit " + start_node.toString() + " : " + dataval.toString());
 			output.collect(new IntWritable(Integer.parseInt(start_node.toString())), new Text(dataval.toString()));
-//			System.out.println("in 2 emit " + start_node.toString() + " : " + datakey.toString());
-//			output.collect(new IntWritable(Integer.parseInt(start_node.toString())), new Text(datakey.toString()));
+			System.out.println("in 2 emit " + start_node.toString() + " : " + datakey.toString());
+			output.collect(new IntWritable(Integer.parseInt(start_node.toString())), new Text(datakey.toString()));
 			String nodes = dataval.toString();
 			String[] nodelist = nodes.split(" ");
 			for (String node : nodelist){
