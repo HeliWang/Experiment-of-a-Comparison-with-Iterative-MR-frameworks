@@ -69,8 +69,8 @@ IntWritable, Text, IntWritable, Text>{
 		else if(value.toString().contains("-2")){
 			System.out.println("in 2 emit " + start_node.toString() + " : " + dataval.toString());
 			output.collect(new IntWritable(Integer.parseInt(start_node.toString())), new Text(dataval.toString()));
-			System.out.println("in 2 emit " + start_node.toString() + " : " + datakey.toString());
-			output.collect(new IntWritable(Integer.parseInt(start_node.toString())), new Text(datakey.toString()));
+//			System.out.println("in 2 emit " + start_node.toString() + " : " + datakey.toString());
+//			output.collect(new IntWritable(Integer.parseInt(start_node.toString())), new Text(datakey.toString()));
 			String nodes = dataval.toString();
 			String[] nodelist = nodes.split(" ");
 			for (String node : nodelist){
