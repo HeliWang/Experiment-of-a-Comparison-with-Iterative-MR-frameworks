@@ -109,8 +109,6 @@ public class KmeanR extends Configured implements Tool {
 			printUsage();
 			return -1;
 		}
-		System.out.println("inkmean");
-		for(String ar:args){ System.out.println(ar);}
 
 		List other_args = new ArrayList();
 		for (int i = 0; i < args.length; ++i) {
@@ -136,6 +134,9 @@ public class KmeanR extends Configured implements Tool {
 				return -1;
 			}
 		}
+
+		System.out.println("inkmean");
+		for(Object ar:other_args){ System.out.println((String)ar);}
 
 		if (other_args.size() < 5) {
 			System.out.println("ERROR: Wrong number of parameters: "
