@@ -45,6 +45,8 @@ public class KmeanR extends Configured implements Tool {
 		args[2] = "Text";
 		args[3] = String.valueOf(0);
 		args[4] = String.valueOf(this.partitions);
+		
+		for(String ar:args){ System.out.println(ar);}
 
 		ToolRunner.run(new Configuration(), new PreProcessRep(), args);
 	}
@@ -107,6 +109,8 @@ public class KmeanR extends Configured implements Tool {
 			printUsage();
 			return -1;
 		}
+		System.out.println("inkmean");
+		for(String ar:args){ System.out.println(ar);}
 
 		List other_args = new ArrayList();
 		for (int i = 0; i < args.length; ++i) {
@@ -141,10 +145,10 @@ public class KmeanR extends Configured implements Tool {
 			return -1;
 		}
 
-		String input = (String) other_args.get(0);
-		String instate = (String) other_args.get(1);
-		String instatic = (String) other_args.get(2);
-		String output = (String) other_args.get(3);
+		String input = (String) other_args.get(1);
+		String instate = (String) other_args.get(2);
+		String instatic = (String) other_args.get(3);
+		String output = (String) other_args.get(4);
 		this.k = Integer.parseInt(args[4]);
 
 		preprocess(instate, instatic);
