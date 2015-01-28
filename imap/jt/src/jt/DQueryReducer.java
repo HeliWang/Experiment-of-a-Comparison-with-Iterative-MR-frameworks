@@ -38,11 +38,14 @@ IterativeReducer<IntWritable, Text, IntWritable, Text>{
 		ArrayList<String> outlist = new ArrayList<String>();
 		while(values.hasNext()){
 			Text v = values.next();
-			if (!outlist.contains(v.toString())){
-				if(key.toString().equals(start_node) && v.toString().trim().equals("-2")) continue;
-				if(key.toString().equals(start_node) && v.toString().trim().equals(start_node)) continue;
-				res += v.toString() + " ";
-				outlist.add(v.toString());
+			String[] vs = v.toString().split(" ");
+			for(String vsv : vs){
+				if (!outlist.contains(vsv.toString())){
+					if(key.toString().equals(start_node) && vsv.toString().trim().equals("-2")) continue;
+					if(key.toString().equals(start_node) && vsv.toString().trim().equals(start_node)) continue;
+					res += vsv.toString() + " ";
+					outlist.add(vsv.toString());
+				}
 			}
 		}
 		System.out.println("reduce " + key + " : " + res);
