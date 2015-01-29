@@ -75,6 +75,14 @@ public class KMeansMapR extends MapReduceBase
 	public void map(IntWritable key, Text value, IntWritable datakey,
 			Text dataval, OutputCollector<IntWritable, Text> output,
 			Reporter report) throws IOException {
+		
+		//input key: nothing
+        //input value: nothing
+        //input data: user artist-id,plays tuples
+        //output key: cluster id  (whose mean has the nearest measure distance)
+        //output value: user-id data
+
+		
 		if (datakey == null) {
 			synchronized (this.centers) {
 				if (this.centers.size() == this.k)
@@ -97,12 +105,15 @@ public class KMeansMapR extends MapReduceBase
 		LastFMUserR curr = new LastFMUserR(datakey.get(), dataval.toString());
 		this.counter += 1;
 		report.setStatus(String.valueOf(this.counter));
+		System.out.println(curr);
 
 		double maxDist = -1.0D;
 		LastFMUserR maxMean = null;
 		synchronized (this.centers) {
 			for (LastFMUserR mean : this.centers) {
 				double dist = mean.ComplexDistance(curr);
+				System.out.println(curr + " distance to " + mean + " is " + dist);
+                System.out.println(dist + " comp " + maxDist);
 				if (dist > maxDist) {
 					maxDist = dist;
 					maxMean = mean;
@@ -116,6 +127,8 @@ public class KMeansMapR extends MapReduceBase
 		else {
 			output.collect(new IntWritable(maxMean.userID),
 					new Text(curr.artistsString()));
+            System.out.println(maxMean.userID + "\t" + curr.artistsString());
+
 		}
 
 		this.clusterWriter.write(String.valueOf(maxMean.userID) + "\t"

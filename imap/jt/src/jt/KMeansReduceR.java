@@ -27,6 +27,10 @@ public class KMeansReduceR extends MapReduceBase implements
 	public void reduce(IntWritable key, Iterator<Text> values,
 			OutputCollector<IntWritable, Text> output, Reporter report)
 			throws IOException {
+		
+		//input key: cluster's mean  (whose mean has the nearest measure distance)
+        //input value: artid,avg,time artid,avg,time 
+		
 		LastFMUserR base = new LastFMUserR(key.get(), "");
 		while (values.hasNext()) {
 			String data = ((Text) values.next()).toString();
