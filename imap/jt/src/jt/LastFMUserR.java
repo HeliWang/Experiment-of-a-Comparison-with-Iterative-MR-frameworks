@@ -105,9 +105,11 @@ public class LastFMUserR {
 	}
 
 	public String getArtists(int threshold) {
+		System.out.println("getartists ");
 		String out = new String();
 		for (Iterator i$ = this.artists.keySet().iterator(); i$.hasNext();) {
 			int artid = ((Integer) i$.next()).intValue();
+			System.out.println("artid:"+artid);
 			if (((Integer) this.addtimes.get(Integer.valueOf(artid)))
 					.intValue() >= threshold) {
 				int avg = ((Integer) this.artists.get(Integer.valueOf(artid)))

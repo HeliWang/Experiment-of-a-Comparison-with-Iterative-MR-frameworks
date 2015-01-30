@@ -43,8 +43,8 @@ public class KMeansReduceR extends MapReduceBase implements
 				LastFMUserR curr = new LastFMUserR(key.get(), data);
 				base.add(curr);
 			}
-
 		}
+		System.out.println("threshold : " + this.threshold);
 
 		output.collect(key, new Text(base.getArtists(this.threshold)));
 		System.out.println(key + "\t" + base.getArtists(this.threshold));
