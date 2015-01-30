@@ -31,11 +31,13 @@ public class KmeanR extends Configured implements Tool {
 	private int threshold;
 	private int partitions;
 	private int iterations;
+	private int nodes;
 
 	public KmeanR() {
 		this.threshold = 50;
 		this.partitions = 0;
 		this.iterations = 20;
+		this.nodes = 1000000;
 	}
 
 	private void preprocess(String instate, String instatic) throws Exception {
@@ -43,7 +45,7 @@ public class KmeanR extends Configured implements Tool {
 		args[0] = instate;
 		args[1] = instatic;
 		args[2] = "Text";
-		args[3] = String.valueOf(0);
+		args[3] = String.valueOf(this.nodes);
 		args[4] = String.valueOf(this.partitions);
 		
 		for(String ar:args){ System.out.println(ar);}
@@ -119,6 +121,8 @@ public class KmeanR extends Configured implements Tool {
 					this.iterations = Integer.parseInt(args[(++i)]);
 				else if ("-t".equals(args[i]))
 					this.threshold = Integer.parseInt(args[(++i)]);
+				else if ("-n".equals(args[i]))
+					this.nodes = Integer.parseInt(args[(++i)]);
 				else
 					other_args.add(args[i]);
 			} catch (NumberFormatException except) {
