@@ -30,11 +30,12 @@ public class KMeansReduceR extends MapReduceBase implements
 		
 		//input key: cluster's mean  (whose mean has the nearest measure distance)
         //input value: artid,avg,time artid,avg,time 
+		System.out.print(key.get() + ":");
 		
 		LastFMUserR base = new LastFMUserR(key.get(), "");
 		while (values.hasNext()) {
 			String data = ((Text) values.next()).toString();
-
+			System.out.print(" " + data);
 			if (KmeanR.COMBINE) {
 				LastFMUserR curr = new LastFMUserR(key.get(), data, true);
 				base.addinred(curr);
