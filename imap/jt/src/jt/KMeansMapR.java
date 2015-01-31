@@ -184,7 +184,7 @@ public class KMeansMapR extends MapReduceBase
 			 outCenters.clear();
 		} else {
 			try {
-				for (int i = 0; i < this.k; ++i){
+				for (int i = 0; i < this.partitions; ++i){
 					this.outCollector.collect(new IntWritable(i), new Text("0,0,0"));
 					System.out.println(i+ " : " + "0,0,0");
 				}

@@ -65,7 +65,7 @@ public class KMeansReduceR extends MapReduceBase implements
 	public void iterate() {
 		try {
             if(outCollector != null){
-                    for(int i=0; i<k; i++){
+                    for(int i=0; i<partitions; i++){
                             outCollector.collect(new IntWritable(i), new Text("0,0,0"));
                             System.out.println(i + "\t" + "0,0,0");
 	                }
