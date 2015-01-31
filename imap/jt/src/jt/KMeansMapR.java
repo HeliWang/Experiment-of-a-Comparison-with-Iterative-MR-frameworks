@@ -124,7 +124,7 @@ public class KMeansMapR extends MapReduceBase
 		else {
 			output.collect(new IntWritable(maxMean.userID),
 					new Text(curr.artistsString()));
-//            System.out.println(maxMean.userID + "\t" + curr.artistsString());
+            System.out.println(maxMean.userID + "\t" + curr.artistsString());
 
 		}
 
@@ -157,6 +157,7 @@ public class KMeansMapR extends MapReduceBase
 	}
 
 	public void iterate() {
+		System.out.println("map iteration called");
 		this.iteration += 1;
 		try {
 			this.clusterWriter.close();

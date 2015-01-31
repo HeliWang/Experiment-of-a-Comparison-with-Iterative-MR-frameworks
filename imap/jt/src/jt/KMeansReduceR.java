@@ -43,7 +43,7 @@ public class KMeansReduceR extends MapReduceBase implements
 		LastFMUserR base = new LastFMUserR(key.get(), "");
 		while (values.hasNext()) {
 			String data = ((Text) values.next()).toString();
-			System.out.println(data);
+//			System.out.println(data);
 			if (KmeanR.COMBINE) {
 				LastFMUserR curr = new LastFMUserR(key.get(), data, true);
 				base.addinred(curr);
