@@ -17,9 +17,9 @@ import org.apache.hadoop.util.ToolRunner;
 
 public class PreProcessRep extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
-		if (args.length != 5) {
+		if (args.length != 6) {
 			System.err
-					.println("Usage: preprocess <in_state> <in_static> <valClass> <pages> <partitions>");
+					.println("Usage: preprocess <in_state> <in_static> <valClass> <pages> <partitions> <boradcast>");
 			System.exit(2);
 		}
 
