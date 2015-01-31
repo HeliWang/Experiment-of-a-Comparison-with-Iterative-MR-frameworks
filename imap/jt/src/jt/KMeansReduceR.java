@@ -64,17 +64,17 @@ public class KMeansReduceR extends MapReduceBase implements
 	}
 
 	public void iterate() {
-		try {
-            if(outCollector != null){
-                    for(int i=0; i<k; i++){
-                            outCollector.collect(new IntWritable(i), new Text("0,0,0"));
-                            System.out.println(i + "\t" + "0,0,0");
-	                }
-	         }
-	    } catch (IOException e) {
-	            // TODO Auto-generated catch block
-	            e.printStackTrace();
-	    }
+//		try {
+//            if(outCollector != null){
+//                    for(int i=0; i<k; i++){
+//                            outCollector.collect(new IntWritable(i), new Text("0,0,0"));
+//                            System.out.println(i + "\t" + "0,0,0");
+//	                }
+//	         }
+//	    } catch (IOException e) {
+//	            // TODO Auto-generated catch block
+//	            e.printStackTrace();
+//	    }
 		this.iteration += 1;
 		Date current = new Date();
 		long passed = (current.getTime() - this.start.getTime()) / 1000L;
