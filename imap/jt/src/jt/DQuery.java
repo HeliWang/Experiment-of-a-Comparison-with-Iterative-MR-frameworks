@@ -29,7 +29,7 @@ public class DQuery extends Configured implements Tool {
 	
 
 	private void preprocess(String instate, String instatic) throws Exception {
-		String[] args = new String[5];
+		String[] args = new String[6];
 		
 		//<in_state> <in_static> <valClass> <pages> <partitions>
 		args[0] = instate;
@@ -37,6 +37,8 @@ public class DQuery extends Configured implements Tool {
 		args[2] = "Text";
 		args[3] = String.valueOf(nodes);
 		args[4] = String.valueOf(partitions);
+        args[5] = String.valueOf(true);
+
 		
 		for(String ar:args){ System.out.println(ar);}
 
