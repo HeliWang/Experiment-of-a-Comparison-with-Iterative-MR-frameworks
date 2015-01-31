@@ -180,11 +180,11 @@ public class KMeansMapR extends MapReduceBase
                          // TODO Auto-generated catch block
                          e.printStackTrace();
                  }
-         }
-         outCenters.clear();
+			 }
+			 outCenters.clear();
 		} else {
 			try {
-				for (int i = 0; i < this.partitions; ++i)
+				for (int i = 0; i < this.k; ++i)
 					this.outCollector.collect(new IntWritable(i), new Text(
 							"0,0,0"));
 			} catch (IOException e) {

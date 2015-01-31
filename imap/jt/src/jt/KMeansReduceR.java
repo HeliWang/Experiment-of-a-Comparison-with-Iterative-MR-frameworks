@@ -17,8 +17,10 @@ public class KMeansReduceR extends MapReduceBase implements
 	private int iteration;
 	private Date start;
 	private int threshold;
-    private int partitions;
+    private int partitions
+    ;
     private OutputCollector<IntWritable, Text> outCollector = null;
+	private int k;
 
 
 	public void configure(JobConf job) {
@@ -26,6 +28,8 @@ public class KMeansReduceR extends MapReduceBase implements
 		this.start = new Date();
 		this.threshold = job.getInt("kmeans.threshold", 0);
         partitions = job.getInt("mapred.iterative.partitions", 0);
+		this.k = job.getInt("kmeans.cluster.k", 0);
+
 
 	}
 
@@ -61,9 +65,9 @@ public class KMeansReduceR extends MapReduceBase implements
 	public void iterate() {
 		try {
             if(outCollector != null){
-                    for(int i=0; i<partitions; i++){
+                    for(int i=0; i<k; i++){
                             outCollector.collect(new IntWritable(i), new Text("0,0,0"));
-//                            System.out.println(i + "\t" + "0,0,0");
+                            System.out.println(i + "\t" + "0,0,0");
 	                }
 	         }
 	    } catch (IOException e) {
