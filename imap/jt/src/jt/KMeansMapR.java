@@ -90,8 +90,7 @@ public class KMeansMapR extends MapReduceBase
 				this.centers.add(curr);
 				LastFMUserR outCenter = new LastFMUserR(key.get(), "");
 				this.outCenters.put(Integer.valueOf(key.get()), outCenter);
-				System.out.println("center size " + this.centers.size() + "\t"
-						+ curr);
+//				System.out.println("center size " + this.centers.size() + "\t"+ curr);
 
 				return;
 			}
@@ -102,15 +101,15 @@ public class KMeansMapR extends MapReduceBase
 		LastFMUserR curr = new LastFMUserR(datakey.get(), dataval.toString());
 		this.counter += 1;
 		report.setStatus(String.valueOf(this.counter));
-		System.out.println(curr);
+//		System.out.println(curr);
 
 		double maxDist = -1.0D;
 		LastFMUserR maxMean = null;
 		synchronized (this.centers) {
 			for (LastFMUserR mean : this.centers) {
 				double dist = mean.ComplexDistance(curr);
-				System.out.println(curr + " distance to " + mean + " is " + dist);
-                System.out.println(dist + " comp " + maxDist);
+//				System.out.println(curr + " distance to " + mean + " is " + dist);
+//                System.out.println(dist + " comp " + maxDist);
 				if (dist > maxDist) {
 					maxDist = dist;
 					maxMean = mean;
@@ -125,7 +124,7 @@ public class KMeansMapR extends MapReduceBase
 		else {
 			output.collect(new IntWritable(maxMean.userID),
 					new Text(curr.artistsString()));
-            System.out.println(maxMean.userID + "\t" + curr.artistsString());
+//            System.out.println(maxMean.userID + "\t" + curr.artistsString());
 
 		}
 

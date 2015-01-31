@@ -38,7 +38,7 @@ public class KMeansReduceR extends MapReduceBase implements
 		
 		//input key: cluster's mean  (whose mean has the nearest measure distance)
         //input value: artid,avg,time artid,avg,time 
-		System.out.println(key.get() + ":");
+//		System.out.println(key.get() + ":");
 		
 		LastFMUserR base = new LastFMUserR(key.get(), "");
 		while (values.hasNext()) {
@@ -52,10 +52,10 @@ public class KMeansReduceR extends MapReduceBase implements
 				base.add(curr);
 			}
 		}
-		System.out.println("threshold : " + this.threshold);
+//		System.out.println("threshold : " + this.threshold);
 
 		output.collect(key, new Text(base.getArtists(this.threshold)));
-		System.out.println(key + "\t" + base.getArtists(this.threshold));
+//		System.out.println(key + "\t" + base.getArtists(this.threshold));
 	}
 
 	public void iterate() {
@@ -63,7 +63,7 @@ public class KMeansReduceR extends MapReduceBase implements
             if(outCollector != null){
                     for(int i=0; i<partitions; i++){
                             outCollector.collect(new IntWritable(i), new Text("0,0,0"));
-                            System.out.println(i + "\t" + "0,0,0");
+//                            System.out.println(i + "\t" + "0,0,0");
 	                }
 	         }
 	    } catch (IOException e) {
@@ -76,5 +76,6 @@ public class KMeansReduceR extends MapReduceBase implements
 
 		System.out.println("iteration " + this.iteration + " timepassed "
 				+ passed);
+		
 	}
 }
