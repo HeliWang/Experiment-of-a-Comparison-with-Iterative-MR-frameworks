@@ -41,12 +41,13 @@ public class KmeanR extends Configured implements Tool {
 	}
 
 	private void preprocess(String instate, String instatic) throws Exception {
-		String[] args = new String[5];
+		String[] args = new String[6];
 		args[0] = instate;
 		args[1] = instatic;
 		args[2] = "Text";
 		args[3] = String.valueOf(this.nodes);
 		args[4] = String.valueOf(this.partitions);
+        args[5] = String.valueOf(true);
 		
 		for(String ar:args){ System.out.println(ar);}
 

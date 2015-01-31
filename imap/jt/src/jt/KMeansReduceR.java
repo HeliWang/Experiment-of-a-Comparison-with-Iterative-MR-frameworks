@@ -17,16 +17,24 @@ public class KMeansReduceR extends MapReduceBase implements
 	private int iteration;
 	private Date start;
 	private int threshold;
+    private int partitions;
+    private OutputCollector<IntWritable, Text> outCollector = null;
+
 
 	public void configure(JobConf job) {
 		this.iteration = 0;
 		this.start = new Date();
 		this.threshold = job.getInt("kmeans.threshold", 0);
+        partitions = job.getInt("mapred.iterative.partitions", 0);
+
 	}
 
 	public void reduce(IntWritable key, Iterator<Text> values,
 			OutputCollector<IntWritable, Text> output, Reporter report)
 			throws IOException {
+		if(output == null){
+            outCollector = output;
+		}
 		
 		//input key: cluster's mean  (whose mean has the nearest measure distance)
         //input value: artid,avg,time artid,avg,time 

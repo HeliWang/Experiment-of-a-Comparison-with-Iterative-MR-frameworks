@@ -40,8 +40,8 @@ public class KMeansMapR extends MapReduceBase
 	private int threshold;
 
 	public KMeansMapR() {
-		this.outCenters = new TreeMap();
-		this.centers = new ArrayList();
+		this.outCenters = new TreeMap<Integer, LastFMUserR>();
+		this.centers = new ArrayList<LastFMUserR>();
 		this.k = 0;
 		this.counter = 0;
 
@@ -58,8 +58,7 @@ public class KMeansMapR extends MapReduceBase
 			this.fs = FileSystem.get(job);
 			Path clusterPath = new Path(this.clusterDir + "/snapshot"
 					+ this.iteration + "/part" + this.taskid);
-			if (this.fs.exists(clusterPath))
-				this.fs.delete(clusterPath, true);
+			if (this.fs.exists(clusterPath)) this.fs.delete(clusterPath, true);
 			FSDataOutputStream clusterOut = this.fs.create(clusterPath);
 			this.clusterWriter = new BufferedWriter(new OutputStreamWriter(
 					clusterOut));
@@ -85,8 +84,7 @@ public class KMeansMapR extends MapReduceBase
 		
 		if (datakey == null) {
 			synchronized (this.centers) {
-				if (this.centers.size() == this.k)
-					this.centers.clear();
+				if (this.centers.size() == this.k) this.centers.clear();
 
 				LastFMUserR curr = new LastFMUserR(key.get(), value.toString());
 				this.centers.add(curr);
@@ -99,8 +97,7 @@ public class KMeansMapR extends MapReduceBase
 			}
 		}
 
-		if (this.outCollector == null)
-			this.outCollector = output;
+		if (this.outCollector == null) this.outCollector = output;
 
 		LastFMUserR curr = new LastFMUserR(datakey.get(), dataval.toString());
 		this.counter += 1;
@@ -121,9 +118,10 @@ public class KMeansMapR extends MapReduceBase
 			}
 		}
 
-		if (KmeanR.COMBINE)
+		if (KmeanR.COMBINE){
 			((LastFMUserR) this.outCenters.get(Integer.valueOf(maxMean.userID)))
 					.add(curr);
+		}
 		else {
 			output.collect(new IntWritable(maxMean.userID),
 					new Text(curr.artistsString()));
@@ -165,8 +163,7 @@ public class KMeansMapR extends MapReduceBase
 			this.clusterWriter.close();
 			Path clusterPath = new Path(this.clusterDir + "/" + this.iteration
 					+ "/part" + this.taskid);
-			if (this.fs.exists(clusterPath))
-				this.fs.delete(clusterPath, true);
+			if (this.fs.exists(clusterPath)) this.fs.delete(clusterPath, true);
 			FSDataOutputStream clusterOut = this.fs.create(clusterPath);
 			this.clusterWriter = new BufferedWriter(new OutputStreamWriter(
 					clusterOut));
@@ -175,20 +172,16 @@ public class KMeansMapR extends MapReduceBase
 		}
 
 		if (KmeanR.COMBINE) {
-			for (Iterator i$ = this.outCenters.keySet().iterator(); i$
-					.hasNext();) {
-				int meanID = ((Integer) i$.next()).intValue();
-				try {
-					this.outCollector.collect(
-							new IntWritable(meanID),
-							new Text(((LastFMUserR) this.outCenters.get(Integer
-									.valueOf(meanID)))
-									.getArtists(this.threshold)));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			this.outCenters.clear();
+			 for(int meanID : this.outCenters.keySet()){
+                 try {
+                         outCollector.collect(new IntWritable(meanID), 
+                                         new Text(outCenters.get(meanID).getArtists(threshold)));
+                 } catch (IOException e) {
+                         // TODO Auto-generated catch block
+                         e.printStackTrace();
+                 }
+         }
+         outCenters.clear();
 		} else {
 			try {
 				for (int i = 0; i < this.partitions; ++i)
