@@ -39,7 +39,7 @@ public class PGR extends Configured implements Tool {
 	}
 
 	private void preprocess(String instate, String instatic) throws Exception {
-		String[] args = new String[5];
+		String[] args = new String[6];
 		args[0] = instate;
 		args[1] = instatic;
 		args[2] = "DoubleWritable";
