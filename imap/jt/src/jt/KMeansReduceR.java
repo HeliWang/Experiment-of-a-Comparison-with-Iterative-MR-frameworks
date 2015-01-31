@@ -36,7 +36,7 @@ public class KMeansReduceR extends MapReduceBase implements
 	public void reduce(IntWritable key, Iterator<Text> values,
 			OutputCollector<IntWritable, Text> output, Reporter report)
 			throws IOException {
-		if(output == null){
+		if(output != null){
             outCollector = output;
 		}
 		
