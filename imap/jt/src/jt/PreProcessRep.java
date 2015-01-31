@@ -28,6 +28,8 @@ public class PreProcessRep extends Configured implements Tool {
 		String valClass = args[2];
 		int totalpages = Integer.parseInt(args[3]);
 		int partitions = Integer.parseInt(args[4]);
+        boolean broadcast = Boolean.parseBoolean(args[5]);
+
 
 		JobConf job = new JobConf(getConf());
 		String jobname = "distribute state data";

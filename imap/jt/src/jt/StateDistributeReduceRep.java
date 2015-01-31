@@ -13,6 +13,7 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.IFile;
+import org.apache.hadoop.mapred.IFile.Writer;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.MapReduceBase;
 import org.apache.hadoop.mapred.OutputCollector;
@@ -38,16 +39,16 @@ public class StateDistributeReduceRep extends MapReduceBase implements
 			this.out = fs.create(outPath);
 
 			if (this.valClass.equals("IntWritable")) {
-				this.intWriter = new IFile.Writer(job, this.out,
+				this.intWriter = new IFile.Writer<IntWritable, IntWritable>(job, this.out,
 						IntWritable.class, IntWritable.class, null, null);
 			} else if (this.valClass.equals("DoubleWritable")) {
-				this.doubleWriter = new IFile.Writer(job, this.out,
+				this.doubleWriter = new IFile.Writer<IntWritable, DoubleWritable>(job, this.out,
 						IntWritable.class, DoubleWritable.class, null, null);
 			} else if (this.valClass.equals("FloatWritable")) {
-				this.floatWriter = new IFile.Writer(job, this.out,
+				this.floatWriter = new Writer<IntWritable, FloatWritable>(job, this.out,
 						IntWritable.class, FloatWritable.class, null, null);
 			} else if (this.valClass.equals("Text")) {
-				this.textWriter = new IFile.Writer(job, this.out,
+				this.textWriter = new IFile.Writer<IntWritable, Text>(job, this.out,
 						IntWritable.class, Text.class, null, null);
 			}
 

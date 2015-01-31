@@ -11,6 +11,7 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.IFile;
+import org.apache.hadoop.mapred.IFile.Writer;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.MapReduceBase;
 import org.apache.hadoop.mapred.OutputCollector;
@@ -29,7 +30,7 @@ public class StaticDistributeReduceRep extends MapReduceBase implements
 			int taskid = Util.getTaskId(job);
 			Path outPath = new Path(outDir + taskid);
 			this.out = fs.create(outPath);
-			this.writer = new IFile.Writer(job, this.out, IntWritable.class,
+			this.writer = new Writer<IntWritable, Text>(job, this.out, IntWritable.class,
 					Text.class, null, null);
 		} catch (IOException e) {
 			e.printStackTrace();

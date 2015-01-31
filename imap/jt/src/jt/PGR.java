@@ -45,6 +45,7 @@ public class PGR extends Configured implements Tool {
 		args[2] = "DoubleWritable";
 		args[3] = String.valueOf(this.nodes);
 		args[4] = String.valueOf(this.partitions);
+        args[5] = String.valueOf(false);
 
 		for(String ar:args){ System.out.println(ar);}
 

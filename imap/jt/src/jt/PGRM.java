@@ -50,10 +50,12 @@ public class PGRM extends MapReduceBase
 		String[] links = linkstring.split(" ");
 		double delta = rank * 0.8D / links.length;
 
-		for (String link : links)
-			if (!(link.equals("")))
-				output.collect(new IntWritable(Integer.parseInt(link)),
+		for (String link : links){
+			if (!(link.equals(""))) continue;
+			output.collect(new IntWritable(Integer.parseInt(link)),
 						new DoubleWritable(delta));
+			
+		}
 	}
 
 	public Path[] initStateData() throws IOException {
