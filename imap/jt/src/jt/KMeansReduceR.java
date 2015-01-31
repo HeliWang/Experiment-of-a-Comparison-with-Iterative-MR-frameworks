@@ -23,19 +23,13 @@ public class KMeansReduceR extends MapReduceBase implements
     ;
     private OutputCollector<IntWritable, Text> outCollector = null;
 	private int k;
-	private HashSet<IntWritable> keyset;
 	
-	
-
-
 	public void configure(JobConf job) {
 		this.iteration = 0;
 		this.start = new Date();
 		this.threshold = job.getInt("kmeans.threshold", 0);
         partitions = job.getInt("mapred.iterative.partitions", 0);
 		this.k = job.getInt("kmeans.cluster.k", 0);
-
-		this.keyset = new HashSet<IntWritable>();
 	}
 
 	public void reduce(IntWritable key, Iterator<Text> values,
@@ -61,7 +55,6 @@ public class KMeansReduceR extends MapReduceBase implements
 				base.add(curr);
 			}
 		}
-		keyset.add(key);
 //		System.out.println("threshold : " + this.threshold);
 		String res = base.getArtists(this.threshold);
 		if (res.equals("")) res = "0,0,0";
@@ -72,14 +65,10 @@ public class KMeansReduceR extends MapReduceBase implements
 	public void iterate() {
 		try {
             if(outCollector != null){
-            	for(IntWritable i : keyset){
-            		outCollector.collect(i, new Text("0,0,0"));
-            		System.out.println(i + "\t" + "0,0,0");
-            	}
-//                    for(int i=0; i<keyset.size(); i++){
-//                            outCollector.collect(new IntWritable(i), new Text("0,0,0"));
-//                            System.out.println(i + "\t" + "0,0,0");
-//	                }
+                    for(int i=0; i<k; i++){
+                            outCollector.collect(new IntWritable(i), new Text("0,0,0"));
+                            System.out.println(i + "\t" + "0,0,0");
+	                }
 	         }
 	    } catch (IOException e) {
 	            // TODO Auto-generated catch block
