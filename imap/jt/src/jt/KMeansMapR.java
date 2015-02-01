@@ -184,10 +184,10 @@ public class KMeansMapR extends MapReduceBase
 			 outCenters.clear();
 		} else {
 			try {
-//				for (int i = 0; i < this.k; i++){
-					this.outCollector.collect(new IntWritable(k), new Text("0,0"));
-					System.out.println(k+ " : " + "0,0");
-//				}
+				for (int i = 0; i < this.k; i++){
+					this.outCollector.collect(new IntWritable(i), new Text("0,0"));
+					System.out.println(i+ " : " + "0,0");
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

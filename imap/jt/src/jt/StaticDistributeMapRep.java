@@ -45,7 +45,9 @@ public class StaticDistributeMapRep extends MapReduceBase implements
 			throws IOException {
 		if (this.output == null)
 			this.output = arg2;
-		int page = Integer.parseInt(arg0.toString());
+		String skey = arg0.toString().replaceAll("AAAAAAAAAZAAAAAAAAAZAAAAAAAAAZAAAAAAAAAZAAAAAAAAAZAAAAAAAAAZAAAAAAAAAZ", "");
+
+		int page = Integer.parseInt(skey);
 
 		while ((page > this.expect) && (this.expect != -1)) {
 			Random rand = new Random();
