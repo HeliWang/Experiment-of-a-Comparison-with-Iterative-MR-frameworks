@@ -36,7 +36,7 @@ public class DGtoAL {
 		}
 	}
 	public static class DAReducer extends MapReduceBase implements Reducer<Text, Text, Text, Text>{
-		private TreeMap<Text, Text> countMap = new TreeMap<Text, Text>();
+//		private TreeMap<Text, Text> countMap = new TreeMap<Text, Text>();
 
 		private MultipleOutputs output;
 
@@ -56,18 +56,20 @@ public class DGtoAL {
 			while(vals.hasNext()){
 				res += vals.next().toString() + " ";
 			}
-			countMap.put(key, new Text(res));
+			output.getCollector("graph", rep).collect(key, res);
+			output.getCollector("rank", rep).collect(key, new Text("1"));
+//			countMap.put(key, new Text(res));
 		}
-		@Override
-		public void close() throws IOException {
-			
-			for(Text key : countMap.descendingKeySet())
-			{
-				output.getCollector("graph", rep).collect(key, countMap.get(key));
-				output.getCollector("rank", rep).collect(key, new Text("1"));
-			}
-			super.close();
-		}
+//		@Override
+//		public void close() throws IOException {
+//			
+//			for(Text key : countMap.descendingKeySet())
+//			{
+//				output.getCollector("graph", rep).collect(key, countMap.get(key));
+//				output.getCollector("rank", rep).collect(key, new Text("1"));
+//			}
+//			super.close();
+//		}
 	}
 	public static void main(String[] args) throws IOException {
 		String input = args[0];
