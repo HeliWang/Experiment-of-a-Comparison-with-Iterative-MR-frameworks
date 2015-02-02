@@ -79,7 +79,7 @@ public class DGtoAL {
 		
 		conf.setMapperClass(DAMapper.class);
 		conf.setReducerClass(DAReducer.class);
-		conf.setNumReduceTasks(1);
+//		conf.setNumReduceTasks(1);
 		
 		MultipleOutputs.addNamedOutput(conf, "graph", TextOutputFormat.class, Text.class, Text.class);
 		MultipleOutputs.addNamedOutput(conf, "rank", TextOutputFormat.class, Text.class, Text.class);
