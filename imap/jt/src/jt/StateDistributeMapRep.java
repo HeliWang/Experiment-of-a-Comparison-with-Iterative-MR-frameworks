@@ -13,7 +13,8 @@ public class StateDistributeMapRep extends MapReduceBase implements
 	public void map(Text key, Text value,
 			OutputCollector<IntWritable, Text> output, Reporter arg3)
 			throws IOException {
-		String skey = key.toString().replaceAll("AAAAAAAAAZAAAAAAAAAZAAAAAAAAAZAAAAAAAAAZAAAAAAAAAZAAAAAAAAAZAAAAAAAAAZ", "");
+		String skey = key.toString().replaceAll("A", "");
+		skey = skey.replaceAll("Z", "");
 		int page = Integer.parseInt(skey);
 		output.collect(new IntWritable(page), value);
 	}
