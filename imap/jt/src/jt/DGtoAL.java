@@ -28,7 +28,7 @@ public class DGtoAL {
 				OutputCollector<Text, Text> col, Reporter rep)
 				throws IOException {
 			String line = value.toString();
-			System.out.println(line);
+//			System.out.println(line);
 			if(!line.startsWith("#")){
 				String[] spline = line.split("\t");
 				col.collect(new Text(spline[0]), new Text(spline[1]));
