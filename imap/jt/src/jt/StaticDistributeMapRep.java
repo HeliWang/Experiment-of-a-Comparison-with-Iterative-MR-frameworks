@@ -62,7 +62,7 @@ public class StaticDistributeMapRep extends MapReduceBase implements
 						new Text(String.valueOf(linkTo)));
 			}
 
-			System.out.println("error out " + page + " : " + links); 
+//			System.out.println("error out " + page + " : " + links); 
 
 			this.expect += 1;
 			this.deadendsCounter += 1;
@@ -71,7 +71,7 @@ public class StaticDistributeMapRep extends MapReduceBase implements
 					+ String.valueOf(this.badCounter) + ":"
 					+ String.valueOf(this.totalCounter));
 		}
-		System.out.println("normal out " + page + " : " + sval );
+//		System.out.println("normal out " + page + " : " + sval );
 		arg2.collect(new IntWritable(page), new Text(sval));
 		this.expect = (page + 1);
 		this.totalCounter += 1;
