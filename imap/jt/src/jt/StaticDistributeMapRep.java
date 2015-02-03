@@ -48,6 +48,9 @@ public class StaticDistributeMapRep extends MapReduceBase implements
 		String skey = arg0.toString().replaceAll("A", "");
 		skey = skey.replaceAll("Z", "");
 		int page = Integer.parseInt(skey);
+		
+		String sval = value.toString().replaceAll("A", "");
+		sval = sval.replaceAll("Z", "");
 
 		while ((page > this.expect) && (this.expect != -1)) {
 			Random rand = new Random();
@@ -68,8 +71,8 @@ public class StaticDistributeMapRep extends MapReduceBase implements
 					+ String.valueOf(this.badCounter) + ":"
 					+ String.valueOf(this.totalCounter));
 		}
-		System.out.println("normal out " + page + " : " + value );
-		arg2.collect(new IntWritable(page), value);
+		System.out.println("normal out " + page + " : " + sval );
+		arg2.collect(new IntWritable(page), new Text(sval));
 		this.expect = (page + 1);
 		this.totalCounter += 1;
 

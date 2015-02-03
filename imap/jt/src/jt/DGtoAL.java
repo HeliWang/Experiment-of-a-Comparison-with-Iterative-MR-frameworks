@@ -56,8 +56,8 @@ public class DGtoAL {
 			while(vals.hasNext()){
 				res += vals.next().toString() + " ";
 			}
-			output.getCollector("graph", rep).collect(key, res);
-			output.getCollector("rank", rep).collect(key, new Text("1"));
+//			output.getCollector("graph", rep).collect(key, res);
+//			output.getCollector("rank", rep).collect(key, new Text("1"));
 //			countMap.put(key, new Text(res));
 		}
 //		@Override
