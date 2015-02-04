@@ -48,7 +48,7 @@ IterativeReducer<IntWritable, Text, IntWritable, Text>{
 				}
 			}
 		}
-//		System.out.println("reduce " + key + " : " + res);
+		System.out.println("reduce " + key + " : " + res);
 		output.collect(new IntWritable(Integer.parseInt(key.toString())), new Text(res));
 	}
 	
