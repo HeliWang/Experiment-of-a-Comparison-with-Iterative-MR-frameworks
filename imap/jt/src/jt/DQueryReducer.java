@@ -36,10 +36,12 @@ IterativeReducer<IntWritable, Text, IntWritable, Text>{
 			throws IOException {
 		String res = "";
 		ArrayList<String> outlist = new ArrayList<String>();
+		System.out.println("k1 : " + key );
 		while(values.hasNext()){
 			Text v = values.next();
 			String[] vs = v.toString().split(" ");
 			for(String vsv : vs){
+				System.out.println(vsv);
 				if (!outlist.contains(vsv.toString())){
 					if(key.toString().equals(start_node) && vsv.toString().trim().equals("-2")) continue;
 					if(key.toString().equals(start_node) && vsv.toString().trim().equals(start_node)) continue;
