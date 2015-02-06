@@ -34,24 +34,21 @@ IterativeReducer<IntWritable, Text, IntWritable, Text>{
 	public void reduce(IntWritable key, Iterator<Text> values,
 			OutputCollector<IntWritable, Text> output, Reporter report)
 			throws IOException {
-		String res = "";
-		ArrayList<String> outlist = new ArrayList<String>();
-		System.out.println("k1 : " + key );
+//		System.out.println("k1 : " + key );
+		int min = Integer.MAX_VALUE;
 		while(values.hasNext()){
 			Text v = values.next();
 			String[] vs = v.toString().split(" ");
 			for(String vsv : vs){
-				System.out.println(vsv);
-				if (!outlist.contains(vsv.toString())){
-					if(key.toString().equals(start_node) && vsv.toString().trim().equals("-2")) continue;
-					if(key.toString().equals(start_node) && vsv.toString().trim().equals(start_node)) continue;
-					res += vsv.toString() + " ";
-					outlist.add(vsv.toString());
+//				System.out.println(vsv);
+				if (Integer.parseInt(vsv) < min){
+					min = Integer.parseInt(vsv);
 				}
 			}
 		}
-		System.out.println("reduce " + key + " : " + res);
-		output.collect(new IntWritable(Integer.parseInt(key.toString())), new Text(res));
+		min += iteration;
+		System.out.println("reduce " + key + " : " + min);
+		output.collect(new IntWritable(Integer.parseInt(key.toString())), new Text(""+min));
 	}
 	
 	@Override

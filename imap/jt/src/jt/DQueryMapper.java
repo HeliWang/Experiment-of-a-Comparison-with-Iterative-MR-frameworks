@@ -52,30 +52,30 @@ IntWritable, Text, IntWritable, Text>{
 			Text dataval, OutputCollector<IntWritable, Text> output, Reporter report)
 			throws IOException {
 		
-		System.out.println("k1 : " + key + " : " + value);
-		System.out.println("dk : " + datakey + " : " + dataval); 
+//		System.out.println("k1 : " + key + " : " + value);
+//		System.out.println("dk : " + datakey + " : " + dataval); 
 
 		String fnode = datakey.toString();
 		if (fnode.equals(start_node)){
-			System.out.println("emit " + datakey.toString() + " : " + dataval.toString());
-			output.collect(datakey, new Text(dataval.toString()));
+//			System.out.println("emit " + datakey.toString() + " : " + dataval.toString());
+			output.collect(datakey, new Text("0"));
 			String nodes = dataval.toString();
 			String[] nodelist = nodes.split(" ");
 			for (String node : nodelist){
-				System.out.println("in nodelist emit : " + node);
-				output.collect(new IntWritable(Integer.parseInt(node.toString())), new Text("-2"));
+//				System.out.println("in nodelist emit : " + node);
+				output.collect(new IntWritable(Integer.parseInt(node.toString())), new Text("1"));
 			}
 		}
-		else if(value.toString().contains("-2")){ 
-			System.out.println("in 2 emit " + start_node.toString() + " : " + dataval.toString());
-			output.collect(new IntWritable(Integer.parseInt(start_node.toString())), new Text(dataval.toString()));
-			System.out.println("in 2 emit " + start_node.toString() + " : " + datakey.toString());
-			output.collect(new IntWritable(Integer.parseInt(start_node.toString())), new Text(datakey.toString()));
+		else if(!value.toString().equals("-1")){ 
+//			System.out.println("in 2 emit " + start_node.toString() + " : " + dataval.toString());
+			output.collect(key, value);
+//			System.out.println("in 2 emit " + start_node.toString() + " : " + datakey.toString());
 			String nodes = dataval.toString();
 			String[] nodelist = nodes.split(" ");
+			int nv = Integer.parseInt(value.toString()) + 1;
 			for (String node : nodelist){
-				System.out.println("in 2 nodelist emit : " + node);
-				output.collect(new IntWritable(Integer.parseInt(node.toString())), new Text("-2"));
+//				System.out.println("in 2 nodelist emit : " + node);
+				output.collect(new IntWritable(Integer.parseInt(node.toString())), new Text(nv +""));
 			}
 		}
 		else{
