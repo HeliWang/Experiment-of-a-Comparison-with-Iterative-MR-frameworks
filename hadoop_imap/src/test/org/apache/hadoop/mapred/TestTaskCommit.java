@@ -177,6 +177,33 @@ public class TestTaskCommit extends HadoopTestCase {
         throws IOException {
       // NOTHING
     }
+
+    @Override
+    public ReduceTaskCompletionEventsUpdate getLocalReduceCompletionEvents(
+	    JobID jobId, int iteration) throws IOException {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public MapReduceOutputReadyEvent getMapReduceOutputReadyEvent(JobID jobid,
+	    int iteration) throws IOException {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public void iterativeTaskComplete(IterativeTaskCompletionEvent event)
+	    throws IOException {
+	// TODO Auto-generated method stub
+	
+    }
+
+    @Override
+    public void transmitGlobalData(GlobalData globaldata) throws IOException {
+	// TODO Auto-generated method stub
+	
+    }
   }
   
   /**

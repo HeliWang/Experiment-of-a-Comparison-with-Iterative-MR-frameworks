@@ -21,7 +21,7 @@
       <map:serializer name="fo2pdf"
                 src="org.apache.cocoon.serialization.FOPSerializer"
                 mime-type="application/pdf">
-        <user-config src="/home/zhangyf/workspace/incr-hadoop-0.1/src/docs/cn/uming.conf"/>
+        <user-config src="/Users/sbyoun/dev/git/Experiment-of-a-Comparison-with-Iterative-MR-frameworks/hadoop_imap/src/docs/cn/uming.conf"/>
         </map:serializer>
     </map:serializers>
   </map:components>
