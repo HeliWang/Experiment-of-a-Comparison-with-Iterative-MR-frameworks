@@ -73,6 +73,10 @@ public class PGR extends Configured implements Tool {
 		job.setInt("mapred.iterative.partitions", this.partitions);
 		job.setInt("mapred.iterative.snapshot.interval", this.interval);
 		job.setInt("mapred.iterative.stop.iteration", this.iterations);
+		
+		job.set("mapred.map.java.opt", "-Xmx512m -XX:MaxDirectMemorySize=512M -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8888");
+		job.set("mapred.reduce.java.opt", "-Xmx512m -XX:MaxDirectMemorySize=512M -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8889");
+		System.out.println("java.opt setted");
 
 		job.setJarByClass(PGR.class);
 		job.setMapperClass(PGRM.class);

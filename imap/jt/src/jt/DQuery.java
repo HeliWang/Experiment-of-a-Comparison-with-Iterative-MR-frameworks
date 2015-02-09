@@ -65,6 +65,9 @@ public class DQuery extends Configured implements Tool {
 	    job.setBoolean("mapred.job.iterative", true);  
 	    job.setBoolean("mapred.iterative.reducesync", true);
 	    job.set("mapred.iterative.jointype", "one2one");
+	    
+	    job.set("mapred.map.java.opt", "-Xmx512m -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8888");
+	    job.set("mapred.reduce.java.opt", "-Xmx512m -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8889");
 
 //		job.set("mapred.iterative.jointype", "one2all");
 		
