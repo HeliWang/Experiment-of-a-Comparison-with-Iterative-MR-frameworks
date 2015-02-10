@@ -9,6 +9,7 @@ import java.util.Random;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.FileInputFormat;
@@ -31,25 +32,21 @@ import org.apache.hadoop.mapred.TextInputFormat;
 import org.apache.hadoop.mapred.lib.HashPartitioner;
 
 
-public class IterPageRank {
-	
-	//damping factor
-	public static final float DAMPINGFAC = (float)0.8;
-	public static final float RETAINFAC = (float)0.2;
-	
+public class IterRQ {
+    	
 	public static class DistributeDataMap extends MapReduceBase implements
-		Mapper<Text, Text, LongWritable, Text> {
+		Mapper<Text, Text, Text, Text> {
 		
 		@Override
 		public void map(Text arg0, Text value,
-				OutputCollector<LongWritable, Text> arg2, Reporter arg3)
+				OutputCollector<Text, Text> arg2, Reporter arg3)
 				throws IOException {
 		    // TODO prefix elimination!
 		    
 		    
-			int page = Integer.parseInt(arg0.toString());
+//			int page = Integer.parseInt(arg0.toString());
 		
-			arg2.collect(new LongWritable(page), value);
+			arg2.collect(arg0, value);
 		}
 		
 		/*
@@ -84,26 +81,26 @@ public class IterPageRank {
 	}
 	
 	public static class DistributeDataReduce extends MapReduceBase implements
-		Reducer<LongWritable, Text, LongWritable, Text> {
+		Reducer<Text, Text, Text, Text> {
 		Random rand = new Random();
 		@Override
-		public void reduce(LongWritable key, Iterator<Text> values,
-				OutputCollector<LongWritable, Text> output, Reporter reporter)
+		public void reduce(Text key, Iterator<Text> values,
+				OutputCollector<Text, Text> output, Reporter reporter)
 				throws IOException {
 			String outputv = "";
 
 			while(values.hasNext()){
 				String end = values.next().toString();
-				
-				if(key.get() == Long.parseLong(end)){
-					int randlong = rand.nextInt(Integer.MAX_VALUE);
-					while(randlong == Long.parseLong(end)){
-						randlong = rand.nextInt(Integer.MAX_VALUE);
-					}
-					outputv += randlong + " ";
-				}else{
+//				
+//				if(key.get() == Long.parseLong(end)){
+//					int randlong = rand.nextInt(Integer.MAX_VALUE);
+//					while(randlong == Long.parseLong(end)){
+//						randlong = rand.nextInt(Integer.MAX_VALUE);
+//					}
+//					outputv += randlong + " ";
+//				}else{
 					outputv += end + " ";
-				}
+//				}
 				
 				//outputv += ends + " ";
 			}
@@ -114,22 +111,22 @@ public class IterPageRank {
 	}
 	
 	public static class DistributeDataMap2 extends MapReduceBase implements
-		Mapper<LongWritable, Text, LongWritable, Text> {
+		Mapper<Text, Text, Text, Text> {
 		
 		@Override
-		public void map(LongWritable arg0, Text value,
-				OutputCollector<LongWritable, Text> arg2, Reporter arg3)
+		public void map(Text arg0, Text value,
+				OutputCollector<Text, Text> arg2, Reporter arg3)
 				throws IOException {
 			arg2.collect(arg0, value);
 		}
 	}
 
 	public static class DistributeDataReduce2 extends MapReduceBase implements
-		Reducer<LongWritable, Text, LongWritable, Text> {
+		Reducer<Text, Text, Text, Text> {
 		Random rand = new Random();
 		@Override
-		public void reduce(LongWritable key, Iterator<Text> values,
-				OutputCollector<LongWritable, Text> output, Reporter reporter)
+		public void reduce(Text key, Iterator<Text> values,
+				OutputCollector<Text, Text> output, Reporter reporter)
 				throws IOException {
 			while(values.hasNext()){
 				output.collect(key, values.next());
@@ -137,74 +134,109 @@ public class IterPageRank {
 		}
 	}
 	
-	public static class PageRankMap extends MapReduceBase implements
-		IterativeMapper<LongWritable, Text, LongWritable, FloatWritable, LongWritable, FloatWritable> {
+	public static class RQMap extends MapReduceBase implements
+		IterativeMapper<Text, Text, Text, Text, Text, Text> {
+	    	public String start_node;
+	    	@Override
+	    	public void configure(JobConf job) {
+	    	start_node = job.get("query");
+	    	super.configure(job);
+	    	}
 	
 		@Override
-		public void map(LongWritable statickey, Text staticval,
-				FloatWritable dynamicvalue,
-				OutputCollector<LongWritable, FloatWritable> output,
+		public void map(Text statickey, Text staticval,
+				Text res,
+				OutputCollector<Text, Text> output,
 				Reporter reporter) throws IOException {
 			
-			float rank = dynamicvalue.get();
-			//System.out.println("input : " + key + " : " + rank);
-			String linkstring = staticval.toString();
-			
-			//in order to avoid non-inlink node, which will mismatch the static file
-			output.collect(statickey, new FloatWritable(IterPageRank.RETAINFAC));
-			
-			String[] links = linkstring.split(" ");	
-			float delta = rank * IterPageRank.DAMPINGFAC / links.length;
-			
-			for(String link : links){
-				if(link.equals("")) continue;
-				output.collect(new LongWritable(Long.parseLong(link)), new FloatWritable(delta));
-				//System.out.println("output: " + link + "\t" + delta);
+
+			String fnode = statickey.toString();
+			if (fnode.equals(start_node)){
+				System.out.println("emit " + statickey.toString() + " : " + staticval.toString());
+				output.collect(statickey, new Text(staticval.toString()));
+				String nodes = staticval.toString();
+				String[] nodelist = nodes.split(" ");
+				for (String node : nodelist){
+					System.out.println("in nodelist emit : " + node);
+					output.collect(new Text(node), new Text("-2"));
+				}
+			}
+			else if(res.toString().contains("-2")){ 
+				System.out.println("in 2 emit " + start_node.toString() + " : " + staticval.toString());
+				output.collect(new Text(start_node.toString()), new Text(staticval.toString()));
+				System.out.println("in 2 emit " + start_node.toString() + " : " + statickey.toString());
+				output.collect(new Text(start_node.toString()), new Text(statickey.toString()));
+				String nodes = staticval.toString();
+				String[] nodelist = nodes.split(" ");
+				for (String node : nodelist){
+					System.out.println("in 2 nodelist emit : " + node);
+					output.collect(new Text(node.toString()), new Text("-2"));
+				}
+			}
+			else{
+				output.collect(statickey, res);
 			}
 		}
 
 		@Override
-		public FloatWritable removeLable() {
+		public Text removeLable() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 	
 	}
 	
-	public static class PageRankReduce extends MapReduceBase implements
-		IterativeReducer<LongWritable, FloatWritable, LongWritable, FloatWritable> {
+	public static class RQReduce extends MapReduceBase implements
+		IterativeReducer<Text, Text, Text, Text> {
+	    public String start_node;
+	    @Override
+	    public void configure(JobConf job) {
+	    // TODO Auto-generated method stub
+		start_node = job.get("query");
+	    super.configure(job);
+	    }
 	
 		@Override
-		public void reduce(LongWritable key, Iterator<FloatWritable> values,
-				OutputCollector<LongWritable, FloatWritable> output, Reporter report)
+		public void reduce(Text key, Iterator<Text> values,
+				OutputCollector<Text, Text> output, Reporter report)
 				throws IOException {
-			float rank = 0;
+		    String res = "";
+			ArrayList<String> outlist = new ArrayList<String>();
+//			System.out.println("k1 : " + key );
 			while(values.hasNext()){
-				float v = values.next().get();
-				if(v == -1) continue;
-				rank += v;
+				Text v = values.next();
+				String[] vs = v.toString().split(" ");
+				for(String vsv : vs){
+//					System.out.println(vsv);
+					if (!outlist.contains(vsv.toString())){
+						if(key.toString().equals(start_node) && vsv.toString().trim().equals("-2")) continue;
+						if(key.toString().equals(start_node) && vsv.toString().trim().equals(start_node)) continue;
+						res += vsv.toString() + " ";
+						outlist.add(vsv.toString());
+					}
+				}
 			}
-			
-			output.collect(key, new FloatWritable(rank));
-			//System.out.println("output:" + key + "\t" + rank);
+			System.out.println("reduce " + key + " : " + res);
+			output.collect(new Text(key.toString()), new Text(res));
 		}
 		
 		@Override
-		public float distance(LongWritable key, FloatWritable prevV,
-				FloatWritable currV) throws IOException {
+		public float distance(Text key, Text prevV,
+			Text currV) throws IOException {
 			// TODO Auto-generated method stub
-			return Math.abs(prevV.get() - currV.get());
+//			return Math.abs(prevV.get() - currV.get());
+		    return 0.0f;
 		}
 
 		@Override
-		public FloatWritable removeLable() {
+		public Text removeLable() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 	
 	}
 	
-	public static class PageRankProjector implements Projector<LongWritable, LongWritable, FloatWritable> {
+	public static class RQProjector implements Projector<Text, Text, Text> {
 
 		@Override
 		public void configure(JobConf job) {
@@ -213,19 +245,19 @@ public class IterPageRank {
 		}
 
 		@Override
-		public LongWritable project(LongWritable statickey) {
+		public Text project(Text statickey) {
 			return statickey;
 		}
 
 		@Override
-		public FloatWritable initDynamicV(LongWritable dynamickey) {
-			return new FloatWritable(1);
+		public Text initDynamicV(Text dynamickey) {
+			return new Text("-1");
 		}
 
 		@Override
-		public Partitioner<LongWritable, FloatWritable> getDynamicKeyPartitioner() {
+		public Partitioner<Text, Text> getDynamicKeyPartitioner() {
 			// TODO Auto-generated method stub
-			return new HashPartitioner<LongWritable, FloatWritable>();
+			return new HashPartitioner<Text, Text>();
 		}
 
 		@Override
@@ -235,13 +267,14 @@ public class IterPageRank {
 	}
 
 	private static void printUsage() {
-		System.out.println("pagerank [-p partitions] <inStaticDir> <outDir>");
+		System.out.println("RQ [-p partitions] <inStaticDir> <outDir>");
 		System.out.println(	"\t-p # of parittions\n" +
 							"\t-i snapshot interval\n" +
 							"\t-I # of iterations\n" +
 							"\t-D initial dynamic path\n" +
 							"\t-f input format\n" + 
-							"\t-s run preserve job");
+							"\t-s run preserve job\n"+ 
+							"\t-q query node");
 	}
 
 	public static int main(String[] args) throws Exception {
@@ -257,6 +290,7 @@ public class IterPageRank {
 		String init_dynamic = "";
 		String data_format = "";
 		boolean preserve = true;
+		String query = "";
 		
 		List<String> other_args = new ArrayList<String>();
 		for(int i=0; i < args.length; ++i) {
@@ -271,6 +305,8 @@ public class IterPageRank {
 		        	  init_dynamic = args[++i];
 		          } else if ("-f".equals(args[i])) {
 		        	  data_format = args[++i];
+		          } else if ("-q".equals(args[i])) {
+		        	  query = args[++i];
 		          } else if ("-s".equals(args[i])) {
 		        	  preserve = Boolean.parseBoolean(args[++i]);
 		          } else {
@@ -297,16 +333,18 @@ public class IterPageRank {
 	    String inStatic = other_args.get(0);
 	    String output = other_args.get(1);
 		
-	    String iteration_id = "pagerank" + new Date().getTime();
+	    String iteration_id = "recursivequery" + new Date().getTime();
 	    
 		/**
 		 * the initialization job, for partition the data and workload
 		 */
 	    long initstart = System.currentTimeMillis();
 	    
-	    JobConf job1 = new JobConf(IterPageRank.class);
-	    String jobname1 = "PageRank Init";
+	    JobConf job1 = new JobConf(IterRQ.class);
+	    String jobname1 = "RecursiveQuery Init";
 	    job1.setJobName(jobname1);
+	    
+	    job1.set("query", query);
 	    
 	    job1.setDataDistribution(true);
 	    job1.setIterativeAlgorithmID(iteration_id);
@@ -329,11 +367,11 @@ public class IterPageRank {
 	    FileInputFormat.addInputPath(job1, new Path(inStatic));
 	    FileOutputFormat.setOutputPath(job1, new Path(output + "/substatic"));
 
-	    job1.setOutputKeyClass(LongWritable.class);
+	    job1.setOutputKeyClass(Text.class);
 	    job1.setOutputValueClass(Text.class);
 	    
 	    //new added, the order is strict
-	    job1.setProjectorClass(PageRankProjector.class);
+	    job1.setProjectorClass(RQProjector.class);
 	    
 	    /**
 	     * if partitions to0 small, which limit the map performance (since map is usually more haveyly loaded),
@@ -346,7 +384,7 @@ public class IterPageRank {
 	    JobClient.runJob(job1);
 	    
 	    long initend = System.currentTimeMillis();
-		Util.writeLog("iter.pagerank.log", "init job use " + (initend - initstart)/1000 + " s");
+		Util.writeLog("iter.rq.log", "init job use " + (initend - initstart)/1000 + " s");
 		
 	    /**
 	     * start iterative application jobs
@@ -356,9 +394,11 @@ public class IterPageRank {
 	    //while(cont && iteration < max_iterations){
     	long iterstart = System.currentTimeMillis();
     	
-	    JobConf job = new JobConf(IterPageRank.class);
-	    String jobname = "Iter PageRank ";
+	    JobConf job = new JobConf(IterRQ.class);
+	    String jobname = "Iter RecursiveQuery ";
 	    job.setJobName(jobname);
+	    
+	    job.set("query", query);
     
 	    //if(partitions == 0) partitions = Util.getTTNum(job);
 	    
@@ -389,27 +429,27 @@ public class IterPageRank {
 	    FileInputFormat.addInputPath(job, new Path(output + "/substatic"));
 	    FileOutputFormat.setOutputPath(job, new Path(output + "/result"));
 	    
-	    job.setOutputKeyClass(LongWritable.class);
-	    job.setOutputValueClass(FloatWritable.class);
+	    job.setOutputKeyClass(Text.class);
+	    job.setOutputValueClass(Text.class);
 	    
-	    job.setIterativeMapperClass(PageRankMap.class);	
-	    job.setIterativeReducerClass(PageRankReduce.class);
-	    job.setProjectorClass(PageRankProjector.class);
+	    job.setIterativeMapperClass(RQMap.class);	
+	    job.setIterativeReducerClass(RQReduce.class);
+	    job.setProjectorClass(RQProjector.class);
 	    
 	    job.setNumReduceTasks(partitions);			
 	    JobClient.runIterativeJob(job);
 
     	long iterend = System.currentTimeMillis();
     	itertime += (iterend - iterstart) / 1000;
-    	Util.writeLog("iter.pagerank.log", "iteration computation takes " + itertime + " s");
+    	Util.writeLog("iter.rq.log", "iteration computation takes " + itertime + " s");
 	    	
     	
 	    if(preserve){
 		    //preserving job
 	    	long preservestart = System.currentTimeMillis();
 	    	
-		    JobConf job2 = new JobConf(IterPageRank.class);
-		    jobname = "PageRank Preserve ";
+		    JobConf job2 = new JobConf(IterRQ.class);
+		    jobname = "RQ Preserve ";
 		    job2.setJobName(jobname);
 	    
 		    if(partitions == 0) partitions = Util.getTTNum(job2);
@@ -434,13 +474,13 @@ public class IterPageRank {
 		    	job2.setDistanceThreshold(1);
 		    }
 
-		    job2.setStaticKeyClass(LongWritable.class);
-		    job2.setOutputKeyClass(LongWritable.class);
-		    job2.setOutputValueClass(FloatWritable.class);
+		    job2.setStaticKeyClass(Text.class);
+		    job2.setOutputKeyClass(Text.class);
+		    job2.setOutputValueClass(Text.class);
 		    
-		    job2.setIterativeMapperClass(PageRankMap.class);	
-		    job2.setIterativeReducerClass(PageRankReduce.class);
-		    job2.setProjectorClass(PageRankProjector.class);
+		    job2.setIterativeMapperClass(RQMap.class);	
+		    job2.setIterativeReducerClass(RQReduce.class);
+		    job2.setProjectorClass(RQProjector.class);
 		    
 		    job2.setNumReduceTasks(partitions);			
 
