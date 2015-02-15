@@ -32,6 +32,8 @@ public class PGRM extends MapReduceBase
 		this.subRankDir = job.get("dir.substate");
 		this.subGraphsDir = job.get("dir.substatic");
 		this.taskid = Util.getTaskId(job);
+		
+		System.out.println(job.get("mapred.map.java.opt"));
 	}
 
 	public void map(IntWritable key, DoubleWritable value, IntWritable datakey,
