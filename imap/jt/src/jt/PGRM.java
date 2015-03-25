@@ -40,7 +40,7 @@ public class PGRM extends MapReduceBase
 			Text dataval, OutputCollector<IntWritable, DoubleWritable> output,
 			Reporter report) throws IOException {
 		
-		System.out.println(taskid + " k1 : " + key + " : " + value + " dk : " + datakey + " : " + dataval);
+//		System.out.println(taskid + " k1 : " + key + " : " + value + " dk : " + datakey + " : " + dataval);
 		
 		double rank = value.get();
 
@@ -51,11 +51,11 @@ public class PGRM extends MapReduceBase
 
 		String[] links = linkstring.split(" ");
 		double delta = rank * 0.8D / links.length;
-		System.out.println("ll : " + links.length);
-		System.out.println("d : " + delta);
+//		System.out.println("ll : " + links.length);
+//		System.out.println("d : " + delta);
 		for (String link : links){
 			if (link.equals("")) continue;
-			System.out.println(link + " : " + delta);
+//			System.out.println(link + " : " + delta);
 			output.collect(new IntWritable(Integer.parseInt(link)),
 						new DoubleWritable(delta));
 			
