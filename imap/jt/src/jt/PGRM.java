@@ -51,9 +51,11 @@ public class PGRM extends MapReduceBase
 
 		String[] links = linkstring.split(" ");
 		double delta = rank * 0.8D / links.length;
-
+		System.out.println("ll : " + links.length);
+		System.out.println("d : " + delta);
 		for (String link : links){
 			if (!(link.equals(""))) continue;
+			System.out.println(link + " : " + delta);
 			output.collect(new IntWritable(Integer.parseInt(link)),
 						new DoubleWritable(delta));
 			
