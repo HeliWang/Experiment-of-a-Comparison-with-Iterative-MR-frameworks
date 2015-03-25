@@ -40,7 +40,7 @@ public class PGRR extends MapReduceBase
 		while (values.hasNext()) {
 			double v = ((DoubleWritable) values.next()).get();
 			System.out.print(v + " ");
-			if (v != -1.0D) continue;
+			if (v == -1.0D) continue;
 			rank += v;
 		}
 		System.out.println();
