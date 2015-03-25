@@ -54,7 +54,7 @@ public class PGRM extends MapReduceBase
 		System.out.println("ll : " + links.length);
 		System.out.println("d : " + delta);
 		for (String link : links){
-			if (!(link.equals(""))) continue;
+			if (link.equals("")) continue;
 			System.out.println(link + " : " + delta);
 			output.collect(new IntWritable(Integer.parseInt(link)),
 						new DoubleWritable(delta));
