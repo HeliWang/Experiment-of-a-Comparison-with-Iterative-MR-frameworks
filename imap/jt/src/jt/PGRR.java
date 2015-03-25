@@ -36,13 +36,16 @@ public class PGRR extends MapReduceBase
 		this.output = output;
 	    }
 		double rank = 0.0D;
+		System.out.print(key + "\t : ");
 		while (values.hasNext()) {
 			double v = ((DoubleWritable) values.next()).get();
+			System.out.print(v + " ");
 			if (v != -1.0D) continue;
 			rank += v;
 		}
-
+		System.out.println();
 		rank = 0.2D + rank * 0.8D;
+		System.out.println(key + " , " + rank );
 		output.collect(key, new DoubleWritable(rank));
 	}
 
